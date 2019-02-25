@@ -1,0 +1,105 @@
+/*Set fonts*/
+h1 {
+	font-family: 'Roboto', sans-serif;
+	font-size: 48px;
+	font-weight: lighter;
+	line-height: 0.5;
+}
+
+h2 {
+	font-family: 'Roboto', sans-serif;
+	font-size: 24px;
+	font-weight: lighter;
+	line-height: 0.5;
+	color: #a3a3a3
+}
+
+h3 {
+	font-family: 'Roboto', sans-serif;
+	font-size: 24px;
+	font-weight: lighter;
+	line-height: 0.5;
+}
+
+p {
+	font-family: 'Roboto', sans-serif;
+	font-size: 10px;
+	font-weight: lighter;
+	line-height: 0.5;
+}
+
+hr {
+	border-style: none;
+	height: 5px;
+	background-color:#a3a3a3;
+}
+
+img {
+	height: auto;
+	max-width: 100%;
+}
+
+/*Format the logo and header at the top of the page*/
+.container {
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.box1 {
+	width: 50%;
+}
+
+.box2 {
+	width: 50%;
+	text-align: right;
+}
+
+/*Format the work at the bottom of the page*/
+.container2 {
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.box3, .box4, .box5 {
+	width: 33.3333%;
+}
+
+@media screen and (max-width: 650px) {
+	h1 {
+		font-size: 34px;
+	}
+	h2, h3 {
+		font-size: 22px;
+	}
+}
+
+@media screen and (max-width: 550px) {
+	h1 {
+		font-size: 28px;
+	}
+	h2, h3 {
+		font-size: 20px;
+	}
+	.box3, .box4, .box5 {
+		width: 100%;
+		text-align: center;
+	}
+}
+
+@media screen and (max-width: 450px) {
+	h1 {
+		font-size: 22px;
+	}
+	h2, h3 {
+		font-size: 18px;
+	}
+}
+
+@media screen and (max-width: 350px) {
+	.box1, .box2 {
+		width: 100%;
+		text-align: center;
+	}
+}
