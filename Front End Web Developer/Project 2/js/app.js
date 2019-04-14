@@ -34,10 +34,25 @@ function shuffle(array) {
     return array;
 }
 
+// Sets up a listener for clicked cards.
+function clickedCard(event) {
+    if (event.target.nodeName === 'LI') {
+        console.log('A card was clicked.');
+        displayCard(event.target);
+    }
+}
+
+// Function to display cards when clicked.
+function displayCard(target) {
+    let cardClasses = target.classList;
+    cardClasses.add('open', 'show');
+}
+
+deck.addEventListener('click', clickedCard);
+
 
 /*
  * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
  *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
  *  - if the list already has another card, check to see if the two cards match
  *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
