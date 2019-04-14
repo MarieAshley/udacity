@@ -34,10 +34,29 @@ function shuffle(array) {
     return array;
 }
 
+// Function to check for matched cards.
+let tempOpenCards = [];
+function checkMatch(target) {
+    tempOpenCards.push(target);
+    if (tempOpenCards.length === 2) {
+        let card1 = tempOpenCards[0].querySelector('.fa');
+        let card2 = tempOpenCards[1].querySelector('.fa');
+        card1 = card1.classList[1];
+        card2 = card2.classList[1];
+        if (card1 === card2) {
+            keepMatchedOpen(tempOpenCards)
+        }
+        else {
+            // Hide unmatched cards after half a second
+            setTimeout(function() {hideCards();}, 500);
+        }
+    }
+    console.log(tempOpenCards);
+}
+
 // Sets up a listener for clicked cards.
 function clickedCard(event) {
     if (event.target.nodeName === 'LI') {
-        console.log('A card was clicked.');
         displayCard(event.target);
     }
 }
@@ -45,7 +64,30 @@ function clickedCard(event) {
 // Function to display cards when clicked.
 function displayCard(target) {
     let cardClasses = target.classList;
-    cardClasses.add('open', 'show');
+
+    // Ensure the same card was not clicked twice.
+    if (!cardClasses.contains('open') && !cardClasses.contains('show')) {
+        cardClasses.add('open', 'show');
+        checkMatch(event.target);
+    }
+}
+
+// Function to hide non matching cards
+function hideCards() {
+    tempOpenCards.forEach(function(card) {
+        card.classList.remove('open', 'show');
+    });
+    tempOpenCards = [];
+}
+
+// Function to keep two matched cards face up.
+function keepMatchedOpen() {
+    tempOpenCards.forEach(function(card) {
+        let cardClasses = card.classList;
+        cardClasses.remove('open', 'show');
+        cardClasses.add('match');
+    });
+    tempOpenCards = [];
 }
 
 deck.addEventListener('click', clickedCard);
@@ -53,10 +95,7 @@ deck.addEventListener('click', clickedCard);
 
 /*
  * set up the event listener for a card. If a card is clicked:
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
  *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
