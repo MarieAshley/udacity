@@ -1,14 +1,23 @@
-/*
- * Create a list that holds all of your cards
- */
+// Creates a NodeList that holds all initial game cards from index.html
+let defaultCardOrder = document.querySelectorAll(".card");
+// As NodeList is immutable, convert to an array.
+let cards = [].slice.call(defaultCardOrder);
 
+// Remove default cards from the deck
+defaultCardOrder.forEach(function(card) {
+    card.remove();
+});
 
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
+// Shuffle cards
+cards = shuffle(cards);
+
+// Add shuffled cards to deck.
+let fragment = document.createDocumentFragment();
+let deck = document.querySelector(".deck");
+cards.forEach(function(card) {
+    fragment.appendChild(card);
+});
+deck.appendChild(fragment);
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
