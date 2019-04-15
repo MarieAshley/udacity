@@ -70,6 +70,12 @@ function clickedCard(event) {
     }
 }
 
+// Sets up a listener for the clicked refresh button.
+function clickedRefresh(event) {
+    console.log("refresh")
+    window.location.reload();
+}
+
 // Function to display cards when clicked.
 function displayCard(target) {
     let cardClasses = target.classList;
@@ -107,15 +113,17 @@ function keepMatchedOpen() {
         Time: ${Math.round((performance.now() - startTime)/1000)} seconds<br>
         ${scorePanel.outerHTML}`;
         document.getElementById("overlay-text").innerHTML = winningText;
+
+        // Ensure player can reset the game after winning
+        let refresh = document.querySelector(".fa-repeat");
+        refresh.addEventListener('click', clickedRefresh);
     }
 }
 
 deck.addEventListener('click', clickedCard);
 
-// Function to turn overlay off if user wants to play again
-function playAgain() {
-  document.getElementById("overlay-box").style.display = "none";
-}
+let refresh = document.querySelector(".fa-repeat");
+refresh.addEventListener('click', clickedRefresh);
 
 // Start the game clock
 let startTime = performance.now();
