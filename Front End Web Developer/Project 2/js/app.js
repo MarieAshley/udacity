@@ -36,6 +36,7 @@ function shuffle(array) {
 // Function to check for matched cards.
 let tempOpenCards = [];
 let allOpenCards = 0;
+let movesCounter = 0;
 function checkMatch(target) {
     tempOpenCards.push(target);
     if (tempOpenCards.length === 2) {
@@ -50,6 +51,9 @@ function checkMatch(target) {
             // Hide unmatched cards after half a second
             setTimeout(function() {hideCards();}, 500);
         }
+        // Update moves counter
+        movesCounter = Number(document.querySelector('.moves').innerHTML) + 1;
+        document.querySelector('.moves').innerHTML = movesCounter.toString();
     }
 }
 
@@ -92,21 +96,14 @@ function keepMatchedOpen() {
     // Prompt "You Won!" winning overlay message.
     if (allOpenCards === 16) {
         document.getElementById("overlay-box").style.display = "block";
+        let winningText = `You won in ${movesCounter} moves!`;
+        document.getElementById("overlay-text").innerHTML = winningText;
     }
 }
 
 deck.addEventListener('click', clickedCard);
 
-// Functions to turn overlay on and off if user wins
-
+// Function to turn overlay off if user wants to play again
 function playAgain() {
   document.getElementById("overlay-box").style.display = "none";
 }
-
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - if the list already has another card, check to see if the two cards match
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
