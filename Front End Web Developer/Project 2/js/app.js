@@ -96,7 +96,8 @@ function keepMatchedOpen() {
     // Prompt "You Won!" winning overlay message.
     if (allOpenCards === 16) {
         document.getElementById("overlay-box").style.display = "block";
-        let winningText = `You won in ${movesCounter} moves!`;
+        let winningText = `You won in ${movesCounter} moves!<br>
+        Time: ${Math.round((performance.now() - startTime)/1000)} seconds`;
         document.getElementById("overlay-text").innerHTML = winningText;
     }
 }
@@ -107,3 +108,6 @@ deck.addEventListener('click', clickedCard);
 function playAgain() {
   document.getElementById("overlay-box").style.display = "none";
 }
+
+// Start the game clock
+let startTime = performance.now();
