@@ -30,12 +30,12 @@ function shuffle(array) {
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
     }
-
     return array;
 }
 
 // Function to check for matched cards.
 let tempOpenCards = [];
+let allOpenCards = 0;
 function checkMatch(target) {
     tempOpenCards.push(target);
     if (tempOpenCards.length === 2) {
@@ -51,7 +51,6 @@ function checkMatch(target) {
             setTimeout(function() {hideCards();}, 500);
         }
     }
-    console.log(tempOpenCards);
 }
 
 // Sets up a listener for clicked cards.
@@ -88,9 +87,21 @@ function keepMatchedOpen() {
         cardClasses.add('match');
     });
     tempOpenCards = [];
+    allOpenCards += 2
+
+    // Prompt "You Won!" winning overlay message.
+    if (allOpenCards === 16) {
+        document.getElementById("overlay-box").style.display = "block";
+    }
 }
 
 deck.addEventListener('click', clickedCard);
+
+// Functions to turn overlay on and off if user wins
+
+function playAgain() {
+  document.getElementById("overlay-box").style.display = "none";
+}
 
 
 /*
