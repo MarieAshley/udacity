@@ -107,10 +107,10 @@ function keepMatchedOpen() {
 
     // Prompt "You Won!" winning overlay message.
     if (allOpenCards === 16) {
+        clearInterval(timer); // stop the game clock
         document.getElementById("overlay-box").style.display = "block";
         scorePanel = document.querySelector(".score-panel");
         let winningText = `You won!<br>
-        Time: ${Math.round((performance.now() - startTime)/1000)} seconds<br>
         ${scorePanel.outerHTML}`;
         document.getElementById("overlay-text").innerHTML = winningText;
 
@@ -127,3 +127,7 @@ refresh.addEventListener('click', clickedRefresh);
 
 // Start the game clock
 let startTime = performance.now();
+let timer = setInterval(function(){
+    let displayTime = Math.round((performance.now() - startTime)/1000);
+    document.querySelector('.timer').innerHTML=`, Seconds: ${displayTime}`;
+}, 1000);
