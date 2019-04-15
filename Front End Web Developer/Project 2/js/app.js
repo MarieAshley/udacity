@@ -54,6 +54,12 @@ function checkMatch(target) {
         // Update moves counter
         movesCounter = Number(document.querySelector('.moves').innerHTML) + 1;
         document.querySelector('.moves').innerHTML = movesCounter.toString();
+
+        //Reduce number of stars with more moves
+        if ((movesCounter === 9) || (movesCounter === 17) || (movesCounter === 25)) {
+            document.querySelector('.fa-star').remove();
+        }
+
     }
 }
 
@@ -96,8 +102,10 @@ function keepMatchedOpen() {
     // Prompt "You Won!" winning overlay message.
     if (allOpenCards === 16) {
         document.getElementById("overlay-box").style.display = "block";
-        let winningText = `You won in ${movesCounter} moves!<br>
-        Time: ${Math.round((performance.now() - startTime)/1000)} seconds`;
+        scorePanel = document.querySelector(".score-panel");
+        let winningText = `You won!<br>
+        Time: ${Math.round((performance.now() - startTime)/1000)} seconds<br>
+        ${scorePanel.outerHTML}`;
         document.getElementById("overlay-text").innerHTML = winningText;
     }
 }
