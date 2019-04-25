@@ -1,4 +1,4 @@
-// Enemies our player must avoid
+// Enemies our player must avoid, ES5 Class Implementation
 var Enemy = function() {
     // The image/sprite for our enemies
     this.sprite = 'images/enemy-bug.png';
@@ -14,9 +14,13 @@ var Enemy = function() {
 // Update the enemy's position
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
+    // Movement is multiplied by the dt parameter to ensure the game runs at the same speed for all computers.
+    this.x = this.x + (this.speed*dt);
+
+    // Handles player and enemy collison
+    if (this.x === player.x && this.y === player.y) {
+        console.log("Collided with Player!");
+    }
 
 };
 
