@@ -37,15 +37,23 @@ class Player {
 
         // Sets player's initial location
         this.x = 200;
-        this.y = 450;
+        this.y = 400;
     }
     update(movement=[0,0]) {
-        this.x = this.x + movement[0];
-        this.y = this.y + movement[1];
+
+        let newX = this.x + movement[0];
+        let newY = this.y + movement[1];
+
+        // Ensures player does not move off screen
+        if (!(newX < 0 || newY < 0 || newX > 400 || newY > 400)) {
+            this.x = newX;
+            this.y = newY;
+        }
     }
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
+
     handleInput(allowedKeys) {
 
         // Moves the player
@@ -64,7 +72,6 @@ class Player {
                 break;
         }
 
-        // Recall that the player cannot move off screen (so you will need to check for that and handle appropriately)
         // If the player reaches the water the game should be reset by moving the player back to the initial location (you can write a separate reset Player method to handle that)
     }
 }
