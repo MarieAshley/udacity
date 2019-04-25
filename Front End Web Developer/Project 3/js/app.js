@@ -54,6 +54,16 @@ class Player {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
 
+    resetPlayer() {
+
+        // Player moves back to starting position if they hit the water
+
+        if (this.y === 0) {
+            this.x = 200;
+            this.y = 400;
+        }
+    }
+
     handleInput(allowedKeys) {
 
         // Moves the player
@@ -72,7 +82,7 @@ class Player {
                 break;
         }
 
-        // If the player reaches the water the game should be reset by moving the player back to the initial location (you can write a separate reset Player method to handle that)
+        this.resetPlayer()
     }
 }
 
