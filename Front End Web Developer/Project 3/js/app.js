@@ -29,11 +29,16 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
+// Player class, ES6 implementation
 class Player {
-    constructor() {}
+    constructor() {
+        // The image/sprite for our character
+        this.sprite = 'images/char-horn-girl.png';
+
+        // Sets player's initial location
+        this.x = 0;
+        this.y = 0;
+    }
     update() {}
     render() {}
     handleInput() {}
