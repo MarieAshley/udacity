@@ -1,14 +1,15 @@
 // Enemies our player must avoid, ES5 Class Implementation
-var Enemy = function() {
+var Enemy = function(x, y, speed) {
     // The image/sprite for our enemies
     this.sprite = 'images/enemy-bug.png';
 
     // Set enemy initial location
-    this.x = 0;
-    this.y = 50;
+    this.initialX = x;
+    this.x = x;
+    this.y = y;
 
     // Set enemy speed
-    this.speed = 0;
+    this.speed = speed;
 };
 
 // Update the enemy's position
@@ -18,8 +19,16 @@ Enemy.prototype.update = function(dt) {
     this.x = this.x + (this.speed*dt);
 
     // Handles player and enemy collison
-    if (this.x === player.x && this.y === player.y) {
+    let delta = 50;
+    if ((this.x < player.x + delta && this.x > player.x - delta)
+     && (this.y < player.y + delta && this.y > player.y - delta)) {
         console.log("Collided with Player!");
+        player.resetPlayer();
+    }
+
+    // resets enemy location if off board
+    if (this.x > 600) {
+        this.x = this.initialX;
     }
 
 };
@@ -39,13 +48,17 @@ class Player {
         this.x = 200;
         this.y = 400;
     }
+
     update(movement=[0,0]) {
 
         let newX = this.x + movement[0];
         let newY = this.y + movement[1];
 
         // Ensures player does not move off screen
-        if (!(newX < 0 || newY < 0 || newX > 400 || newY > 400)) {
+        if (newY < 0) {
+            console.log("Player won!")
+            this.resetPlayer();
+        } else if (!(newX < 0 || newX > 400 || newY > 400)) {
             this.x = newX;
             this.y = newY;
         }
@@ -57,11 +70,8 @@ class Player {
     resetPlayer() {
 
         // Player moves back to starting position if they hit the water
-
-        if (this.y === 0) {
-            this.x = 200;
-            this.y = 400;
-        }
+        this.x = 200;
+        this.y = 400;
     }
 
     handleInput(allowedKeys) {
@@ -81,12 +91,18 @@ class Player {
                 this.update([0,50]);
                 break;
         }
-
-        this.resetPlayer()
     }
 }
 
-let allEnemies = [new Enemy()];
+let numEnemies = Math.floor(Math.random() * 3) + 2; // Random number of enemies, 2 to 4.
+let allEnemies = [];
+for (let i = 0; i < numEnemies; i++) {
+    let startX = Math.floor(Math.random() * -250); // Random X Start off screen
+    let startY = Math.floor(Math.random() * 250); // Random Y start
+    let speed = Math.floor(Math.random() * 250) + 50; // Random speed not less than 50
+    allEnemies.push(new Enemy(startX, startY, speed));
+}
+
 let player = new Player();
 
 // This listens for key presses and sends the keys to the Player.handleInput() method.
