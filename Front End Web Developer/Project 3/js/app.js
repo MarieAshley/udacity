@@ -5,7 +5,7 @@ var Enemy = function() {
 
     // Set enemy initial location
     this.x = 0;
-    this.y = 0;
+    this.y = 50;
 
     // Set enemy speed
     this.speed = 0;
@@ -33,32 +33,46 @@ Enemy.prototype.render = function() {
 class Player {
     constructor() {
         // The image/sprite for our character
-        this.sprite = 'images/char-horn-girl.png';
+        this.sprite = 'images/char-boy.png';
 
         // Sets player's initial location
-        this.x = 0;
-        this.y = 0;
+        this.x = 200;
+        this.y = 450;
     }
-    update(dt) {
-        this.x = this.x + (this.speed*dt);
+    update(movement=[0,0]) {
+        this.x = this.x + movement[0];
+        this.y = this.y + movement[1];
     }
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
-    handleInput() {}
+    handleInput(allowedKeys) {
+
+        // Moves the player
+        switch (allowedKeys) {
+            case "left":
+                this.update([-50,0]);
+                break;
+            case "up":
+                this.update([0,-50]);
+                break;
+            case "right":
+                this.update([50,0]);
+                break;
+            case "down":
+                this.update([0,50]);
+                break;
+        }
+
+        // Recall that the player cannot move off screen (so you will need to check for that and handle appropriately)
+        // If the player reaches the water the game should be reset by moving the player back to the initial location (you can write a separate reset Player method to handle that)
+    }
 }
 
+let allEnemies = [new Enemy()];
+let player = new Player();
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-let allEnemies = [];
-// Place the player object in a variable called player
-let player = [];
-
-
-
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+// This listens for key presses and sends the keys to the Player.handleInput() method.
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
