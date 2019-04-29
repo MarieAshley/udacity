@@ -44,13 +44,10 @@ $(function() {
     // Test suite for the nav menu of each feed in allFeeds.
     describe('The menu', function() {
 
-    });
-
-        /* TODO: Write a test that ensures the menu element is
-         * hidden by default. You'll have to analyze the HTML and
-         * the CSS to determine how we're performing the
-         * hiding/showing of the menu element.
-         */
+        // Test to ensure the menu element is hidden by default
+        it('should be hidden by default', function() {
+            expect(document.querySelector('body.menu-hidden')).not.toBeNull();
+        });
 
          /* TODO: Write a test that ensures the menu changes
           * visibility when the menu icon is clicked. This test
@@ -73,4 +70,5 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+    });
 }());
