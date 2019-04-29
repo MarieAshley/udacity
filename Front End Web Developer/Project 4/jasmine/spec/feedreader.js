@@ -78,16 +78,26 @@ $(function() {
             expect(document.querySelectorAll('.entry-link').length).toBeGreaterThanOrEqual(1);
             done();
         });
-
     });
 
-    // Tests for when the feed changes
+    //Tests for when the feed changes
     describe('New Feed Selection', function() {
 
-    });
+        let oldFeed, newFeed;
 
-        /* TODO: Write a test that ensures when a new feed is loaded
-         * by the loadFeed function that the content actually changes.
-         * Remember, loadFeed() is asynchronous.
-         */
+        beforeEach(function(done) {
+            loadFeed(0, function() {
+                oldFeed = document.querySelector('.feed').innerHTML;
+                loadFeed(1, function() {
+                    newFeed = document.querySelector('.feed').innerHTML;
+                    done();
+                });
+            }); 
+        });
+
+        // Test that the content changes when the feed is switched.
+        it('contains different content', function() {
+            expect(oldFeed).not.toEqual(newFeed);
+        });
+    });
 }());
