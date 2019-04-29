@@ -26,14 +26,18 @@ $(function() {
             for (let feed of allFeeds) {
                 expect(feed.url).toBeDefined();
                 expect(feed.url.length).not.toBe(0);
+                expect(typeof feed.url).toBe("string");
             }
         });
 
-
-        /* TODO: Write a test that loops through each feed
-         * in the allFeeds object and ensures it has a name defined
-         * and that the name is not empty.
-         */
+        // Test to ensure each feed in allFeeds contains a non-empty name.
+        it('should have a name', function() {
+            for (let feed of allFeeds) {
+                expect(feed.name).toBeDefined();
+                expect(feed.name.length).not.toBe(0);
+                expect(typeof feed.name).toBe("string");
+            }
+        });
     });
 
 
