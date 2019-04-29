@@ -62,8 +62,22 @@ $(function() {
             expect(document.querySelector('body')).toHaveClass('menu-hidden');
         });
 
+    });
+
     // Test suite for Initial RSS Feed Entries
     describe('Initial Entries', function() {
+
+        beforeEach(function(done) {
+            loadFeed(0, function() {
+                done();
+            });
+        });
+
+        // Test to ensure there is at least one .entry element within the .feed container when loadFeed is called
+        it('contains at least one entry', function(done) {
+            expect(document.querySelectorAll('.entry-link').length).toBeGreaterThanOrEqual(1);
+            done();
+        });
 
     });
 
@@ -80,5 +94,4 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
-    });
 }());
