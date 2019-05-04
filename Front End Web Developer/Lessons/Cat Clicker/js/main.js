@@ -17,8 +17,7 @@ class Octopus {
         this.viewCatButtons = new ViewCatButtons(this);
         this.viewCatImage = new ViewCatImage(this);
         this.viewCatImage.addEventListenerToImage();
-        this.viewAdmin = new ViewAdmin();
-        this.viewAdmin.addEventListenerToForm();
+        this.viewAdmin = new ViewAdmin(this);
     }
     updateCatImage(text, imageSrc, counter) {
         this.setCurrentCat(text, imageSrc, counter);
@@ -56,7 +55,11 @@ class Octopus {
 
 class ViewAdmin {
     constructor(octopus) {
+        this.octopus = octopus;
         this.render();
+        this.addEventListenerToForm();
+        this.addEventListenerToAdminButton();
+        this.addEventListenerToCancelButton();
     }
     addEventListenerToForm() {
         this.form = document.querySelector("form");
@@ -72,7 +75,36 @@ class ViewAdmin {
             event.preventDefault();
         });
     }
+    // LEFT OFF HERE
+    toggleHidden() {
+        console.log("hit this");
+        let element = document.querySelector("form");
+        element.classList.toggle("hidden-true");
+        console.log(element);
+        this.render();
+    }
+    addEventListenerToAdminButton() {
+        this.admin = document.querySelector("#admin-button");
+        this.admin.addEventListener("click", function() {
+            let element = document.querySelector("form");
+            element.classList.toggle("hidden-true");
+            octopus.viewAdmin.render();
+        });
+    }
+    addEventListenerToCancelButton() {
+        this.cancel = document.querySelector("#cancel-button");
+        // LEFT OFF HERE
+        this.cancel.addEventListener("click", this.toggleHidden());
+    }
     render() {
+        let currentCat = this.octopus.getCurrentCat();
+        let name = document.querySelector("#form-name");
+        let url = document.querySelector("#form-url");
+        let clicks = document.querySelector("#form-clicks");
+
+        name.setAttribute("value", currentCat[0]);
+        url.setAttribute("value", currentCat[1]);
+        clicks.setAttribute("value", currentCat[2]);
     }
 }
 
@@ -92,6 +124,7 @@ class ViewCatButtons {
                 let imageSrc = cats[buttonText][0];
                 let counter = cats[buttonText][1];
                 octopus.updateCatImage(buttonText, imageSrc, counter);
+                octopus.viewAdmin.render();
             }); 
         });
     }

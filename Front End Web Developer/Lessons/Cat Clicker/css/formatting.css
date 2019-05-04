@@ -43,3 +43,8 @@ img {
 		width: 100%;
 	}
 }
+
+/*Hide and unhide admin box*/
+.hidden-true {
+	display: none;
+}
