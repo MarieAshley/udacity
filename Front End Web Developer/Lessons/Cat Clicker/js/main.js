@@ -72,6 +72,7 @@ class ViewAdmin {
             octopus.removeCurrentCat(currentCat);
             octopus.updateCatImage(text, imageSrc, counter);
             octopus.updateButtons();
+            octopus.viewAdmin.toggleHidden();
             event.preventDefault();
         });
     }
