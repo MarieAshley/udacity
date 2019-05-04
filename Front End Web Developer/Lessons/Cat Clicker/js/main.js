@@ -1,51 +1,174 @@
-// Main JavaScript file for the Cat Clicker game.
+// Main JavaScript file for the Cat Clicker game using MOV.
 
-// Dictionary of cat headers, image sources, and initial counts
-const cats = {"Big Cat": ["img/bigcat.jpg", 0],
-			  "Angry Cat": ["img/angrycat.jpg", 0],
-			  "Sad Cat": ["img/sadcat.jpg", 0],
-			  "Small Cat": ["img/smallcat.jpg", 0],
-			  "Curious Cat": ["img/curiouscat.jpg", 0]
-			 };
-
-function countTracker(counter, counterText, key) {
-
-	return function(){
-		counter ++;
-		counterText.textContent = `Number of clicks: ${counter}`;
-		cats[key][1] = counter;
-	}
+class Model {
+    constructor() {
+        this.currentCat = null;
+        this.cats = {"Big Cat": ["img/bigcat.jpg", 0],
+                     "Angry Cat": ["img/angrycat.jpg", 0],
+                     "Sad Cat": ["img/sadcat.jpg", 0],
+                     "Small Cat": ["img/smallcat.jpg", 0],
+                     "Curious Cat": ["img/curiouscat.jpg", 0]};     
+    }
 }
 
-// Build a list of cats
-let catList = document.querySelector(".cat-links ul");
-for (let key in cats){
-	catList.insertAdjacentHTML('afterbegin', 
-		`<li><button type="button">${key}</button></li>`);
+class Octopus {
+    constructor() {
+        this.model = new Model();
+        this.viewCatButtons = new ViewCatButtons(this);
+        this.viewCatImage = new ViewCatImage(this);
+        this.viewCatImage.addEventListenerToImage();
+        this.viewAdmin = new ViewAdmin(this);
+    }
+    updateCatImage(text, imageSrc, counter) {
+        this.setCurrentCat(text, imageSrc, counter);
+        this.viewCatImage.render(text, imageSrc, counter);
+    }
+    updateButtons() {
+        this.viewCatButtons.render();
+    }
+    incrementCounter(key) {
+        let cats = this.getCats();
+        let counter = cats[key][1];
+        counter ++; 
+        cats[key][1] = counter;
+        this.setCurrentCat(key, cats[key][0], counter)
+        this.viewCatImage.render();
+    }
+    getCats() {
+        return this.model.cats;
+    }
+    getCurrentCat() {
+        return this.model.currentCat;
+    }
+    removeCurrentCat(text) {
+        let cats = this.getCats();
+        delete cats[text];
+    }
+    setCurrentCat(text, imageSrc, counter) {
+        this.model.currentCat = [text, imageSrc, counter];
 
-	// Finds the first (last added) button 
-	// & creates an event listener to update the header and image source
-	let button = document.querySelector(".cat-links li button");
-	button.addEventListener('click', (function(headerText, imageSrc){
-		return function() {
-			let elem = document.querySelector('.box2');
-			let header = elem.querySelector('h3');
-			header.textContent = headerText;
-			let image = elem.querySelector('img');
-			image.setAttribute("src", imageSrc);
-			let counterText = elem.querySelector('p');
-			counterText.textContent = `Number of clicks: ${cats[headerText][1]}`
-		};
-	})(key, cats[key][0]));
+        // Update the dictionary
+        let cats = this.getCats();
+        cats[text] = [imageSrc, counter];
+    }
 }
 
-// Sets the event listener on the image
-let image = document.querySelector('.box2 img');
-image.addEventListener('click', function() {
-	let key = document.querySelector('.box2 h3').textContent;
-	let counter = cats[key][1];
-	let counterText = document.querySelector('.box2 p');
-	counter ++;
-	counterText.textContent = `Number of clicks: ${counter}`;
-	cats[key][1] = counter;
-});
+class ViewAdmin {
+    constructor(octopus) {
+        this.octopus = octopus;
+        this.render();
+        this.addEventListenerToForm();
+        this.addEventListenerToAdminButton();
+        this.addEventListenerToCancelButton();
+    }
+    addEventListenerToForm() {
+        this.form = document.querySelector("form");
+        this.form.addEventListener("submit", function(event) {
+            // value of this = form element
+            let currentCat = octopus.getCurrentCat()[0];
+            let text = this.elements.name.value;
+            let imageSrc = this.elements.imgurl.value;
+            let counter = this.elements.numclicks.value;
+            octopus.removeCurrentCat(currentCat);
+            octopus.updateCatImage(text, imageSrc, counter);
+            octopus.updateButtons();
+            octopus.viewAdmin.toggleHidden();
+            event.preventDefault();
+        });
+    }
+    toggleHidden() {
+        let element = document.querySelector("form");
+        element.classList.toggle("hidden-true");
+        this.render();
+    }
+    addEventListenerToAdminButton() {
+        this.admin = document.querySelector("#admin-button");
+        this.admin.addEventListener("click", _ => this.toggleHidden());
+    }
+    addEventListenerToCancelButton() {
+        this.cancel = document.querySelector("#cancel-button");
+        this.cancel.addEventListener("click", _ => this.toggleHidden());
+    }
+    render() {
+        let currentCat = this.octopus.getCurrentCat();
+        let name = document.querySelector("#form-name");
+        let url = document.querySelector("#form-url");
+        let clicks = document.querySelector("#form-clicks");
+
+        name.setAttribute("value", currentCat[0]);
+        url.setAttribute("value", currentCat[1]);
+        clicks.setAttribute("value", currentCat[2]);
+    }
+}
+
+class ViewCatButtons {
+    constructor(octopus) {
+        this.octopus = octopus
+        this.catList = document.querySelector(".cat-links ul");
+        this.render();
+    }
+    addEventListenerToEachButton() {
+        let octopus = this.octopus;
+        let cats = octopus.getCats();
+        let buttons = document.querySelectorAll(".cat-links li button");
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function(){
+                let buttonText = button.innerText;
+                let imageSrc = cats[buttonText][0];
+                let counter = cats[buttonText][1];
+                octopus.updateCatImage(buttonText, imageSrc, counter);
+                octopus.viewAdmin.render();
+            }); 
+        });
+    }
+    updateButton() {
+       let button = document.querySelector(".cat-links li button");
+    }
+    render() {
+        // Remove current button list
+        this.catList.innerHTML = "";
+
+        let cats = this.octopus.getCats();
+        for (let key in cats){
+            this.catList.insertAdjacentHTML('afterbegin', `<li><button type="button">${key}</button></li>`);
+        }
+        this.addEventListenerToEachButton();
+    }
+}
+
+class ViewCatImage {
+    constructor(octopus) {
+        this.octopus = octopus;
+        let cats = this.octopus.getCats();
+
+        // Easy access to DOM elements
+        this.elem = document.querySelector('.box2');
+        this.counterText = this.elem.querySelector('p');
+        this.header = this.elem.querySelector('h3');
+        this.image = this.elem.querySelector('img');
+
+
+        let buttonText = document.querySelector(".cat-links li button").innerText;
+        let imageSrc = cats[buttonText][0];
+        let counter = cats[buttonText][1];
+        this.octopus.setCurrentCat(buttonText, imageSrc, counter);
+        this.render();
+    }
+    addEventListenerToImage() {
+        let octopus = this.octopus
+        let image = document.querySelector('.box2 img');
+        let cats = octopus.getCats();
+        image.addEventListener('click', function() {
+            let key = document.querySelector('.box2 h3').textContent;
+            octopus.incrementCounter(key);
+        });
+    }
+    render() {
+        let currentCat = this.octopus.getCurrentCat();
+        this.header.textContent = currentCat[0];
+        this.image.setAttribute("src", currentCat[1]);
+        this.counterText.textContent = `Number of clicks: ${currentCat[2]}`;
+    }
+}
+
+let octopus = new Octopus();

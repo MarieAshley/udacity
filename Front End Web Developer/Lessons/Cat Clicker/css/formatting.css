@@ -10,7 +10,14 @@ h3 {
 
 p {
 	font-family: 'Roboto', sans-serif;
-	font-size: 10px;
+	font-size: 15px;
+	font-weight: lighter;
+	line-height: 0.5;
+}
+
+form {
+	font-family: 'Roboto', sans-serif;
+	font-size: 15px;
 	font-weight: lighter;
 	line-height: 0.5;
 }
@@ -27,12 +34,17 @@ img {
 	flex-wrap: wrap;
 }
 
-.box1, .box2 {
-	width: 50%;
+.box1, .box2, .admin-box {
+	width: 33%;
 }
 
-@media screen and (max-width: 550px) {
-	.box1, .box2 {
+@media screen and (max-width: 850px) {
+	.box1, .box2, .admin-box {
 		width: 100%;
 	}
+}
+
+/*Hide and unhide admin box*/
+.hidden-true {
+	display: none;
 }
