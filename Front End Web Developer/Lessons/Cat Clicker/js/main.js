@@ -75,26 +75,18 @@ class ViewAdmin {
             event.preventDefault();
         });
     }
-    // LEFT OFF HERE
     toggleHidden() {
-        console.log("hit this");
         let element = document.querySelector("form");
         element.classList.toggle("hidden-true");
-        console.log(element);
         this.render();
     }
     addEventListenerToAdminButton() {
         this.admin = document.querySelector("#admin-button");
-        this.admin.addEventListener("click", function() {
-            let element = document.querySelector("form");
-            element.classList.toggle("hidden-true");
-            octopus.viewAdmin.render();
-        });
+        this.admin.addEventListener("click", _ => this.toggleHidden());
     }
     addEventListenerToCancelButton() {
         this.cancel = document.querySelector("#cancel-button");
-        // LEFT OFF HERE
-        this.cancel.addEventListener("click", this.toggleHidden());
+        this.cancel.addEventListener("click", _ => this.toggleHidden());
     }
     render() {
         let currentCat = this.octopus.getCurrentCat();
