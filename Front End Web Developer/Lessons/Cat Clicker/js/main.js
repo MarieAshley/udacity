@@ -16,12 +16,16 @@ class Octopus {
         this.model = new Model();
         this.viewCatButtons = new ViewCatButtons(this);
         this.viewCatImage = new ViewCatImage(this);
-        this.viewCatButtons.addEventListenerToEachButton();
         this.viewCatImage.addEventListenerToImage();
+        this.viewAdmin = new ViewAdmin();
+        this.viewAdmin.addEventListenerToForm();
     }
     updateCatImage(text, imageSrc, counter) {
         this.setCurrentCat(text, imageSrc, counter);
         this.viewCatImage.render(text, imageSrc, counter);
+    }
+    updateButtons() {
+        this.viewCatButtons.render();
     }
     incrementCounter(key) {
         let cats = this.getCats();
@@ -37,8 +41,38 @@ class Octopus {
     getCurrentCat() {
         return this.model.currentCat;
     }
+    removeCurrentCat(text) {
+        let cats = this.getCats();
+        delete cats[text];
+    }
     setCurrentCat(text, imageSrc, counter) {
         this.model.currentCat = [text, imageSrc, counter];
+
+        // Update the dictionary
+        let cats = this.getCats();
+        cats[text] = [imageSrc, counter];
+    }
+}
+
+class ViewAdmin {
+    constructor(octopus) {
+        this.render();
+    }
+    addEventListenerToForm() {
+        this.form = document.querySelector("form");
+        this.form.addEventListener("submit", function(event) {
+            // value of this = form element
+            let currentCat = octopus.getCurrentCat()[0];
+            let text = this.elements.name.value;
+            let imageSrc = this.elements.imgurl.value;
+            let counter = this.elements.numclicks.value;
+            octopus.removeCurrentCat(currentCat);
+            octopus.updateCatImage(text, imageSrc, counter);
+            octopus.updateButtons();
+            event.preventDefault();
+        });
+    }
+    render() {
     }
 }
 
@@ -61,11 +95,18 @@ class ViewCatButtons {
             }); 
         });
     }
+    updateButton() {
+       let button = document.querySelector(".cat-links li button");
+    }
     render() {
+        // Remove current button list
+        this.catList.innerHTML = "";
+
         let cats = this.octopus.getCats();
         for (let key in cats){
             this.catList.insertAdjacentHTML('afterbegin', `<li><button type="button">${key}</button></li>`);
         }
+        this.addEventListenerToEachButton();
     }
 }
 
